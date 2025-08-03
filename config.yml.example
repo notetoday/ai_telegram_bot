@@ -24,6 +24,9 @@ chatgpt:
   apikey: ""
   model: "gpt-4o-mini"
 
+ai:
+  timeout: 10
+
 message:
   block_hint: "\\#封禁预警\n[%s](%s) 请注意,你的用户名或发言存在违规 \n⚠️已被AI判断为高风险用户，永久封禁 \n\n风险分数：%d \n\n封禁理由：``` %s ```\n\nAI顺便嘲讽你：``` %s ```"
 
