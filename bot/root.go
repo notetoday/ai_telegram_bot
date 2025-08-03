@@ -50,7 +50,7 @@ func RegisterCommands() {
 
 func RegisterHandle() {
 	Bot.Handle(StartCmd, func(c tb.Context) error {
-		return c.Send("🙋你好，我是一个AI反广告机器人。我的父亲是Assimon。github.com/assimon/ai-anti-bot")
+		return c.Send("🙋你好，我是一个AI反广告机器人。二开作者是Notetoday https://www.github.com/notetoday/ai-anti-bot")
 	}, PreCmdMiddleware)
 	creatorOnly := Bot.Group()
 	creatorOnly.Use(CreatorCmdMiddleware)
