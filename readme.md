@@ -30,7 +30,7 @@ If you are a `developer`, you can use this project to familiarize yourself with 
 
 ```shell
 # Clone the project
-git clone https://github.com/assimon/ai-anti-bot.git && cd ai-anti-bot && mkdir data
+git clone https://github.com/notetoday/ai-anti-bot.git && cd ai-anti-bot && mkdir data
 
 # Set up your configuration
 cp config.yml.example data/config.yml
