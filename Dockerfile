@@ -17,6 +17,7 @@ ENV CGO_ENABLED=1 \
 RUN echo $CC && echo $CXX && $CC --version
 
 RUN go mod download
+RUN go mod tidy
 RUN go mod verify
 RUN go build -ldflags="-s -w" -o ai-anti-bot cmd/*
 

@@ -61,7 +61,12 @@ func (c *ChatGpt) RecognizeTextMessage(ctx context.Context, userInfo, message st
 		return result, err
 	}
 
-	err = json.C.UnmarshalFromString(resp.Choices[0].Message.Content, &result)
+	responseContent := resp.Choices[0].Message.Content
+	// 兼容处理返回结果是markdown格式的问题
+	if len(responseContent) > 7 && responseContent[:7] == "```json" {
+		responseContent = responseContent[7 : len(responseContent)-3]
+	}
+	err = json.C.UnmarshalFromString(responseContent, &result)
 	if err != nil {
 		return result, err
 	}
@@ -111,7 +116,12 @@ func (c *ChatGpt) RecognizeImageMessage(ctx context.Context, userInfo, file stri
 		logger.Log.Error("Recognize message finally failed")
 		return result, err
 	}
-	err = json.C.UnmarshalFromString(resp.Choices[0].Message.Content, &result)
+	responseContent := resp.Choices[0].Message.Content
+	// 兼容处理返回结果是markdown格式的问题
+	if len(responseContent) > 7 && responseContent[:7] == "```json" {
+		responseContent = responseContent[7 : len(responseContent)-3]
+	}
+	err = json.C.UnmarshalFromString(responseContent, &result)
 	if err != nil {
 		return result, err
 	}
