@@ -69,6 +69,9 @@ chatgpt:
   apikey: ""  # apikey
   model: "gpt-4o-mini"   # The detection model to be used. Please note that versions below gpt4 do not support image and file interaction.
 
+ai:
+  timeout: 10 # AI call timeout, in seconds. Default is 10 seconds.
+
 # If your native language is not Chinese but other languages, 
 # please use the translation to replace the following prompt with the language you want.
 prompt:
