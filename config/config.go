@@ -38,14 +38,14 @@ type PromptConfig struct {
 }
 
 func init() {
-	vper.SetDefault("retry.times", 3)
-	vper.SetDefault("retry.delay", 5)
-	vper.SetDefault("log.level", "info")
-	vper.SetDefault("ai.timeout", 10)
-	vper.SetConfigName(CfgFileName)
-	vper.SetConfigType(CfgFileType)
-	vper.AddConfigPath(".")
-	vper.AddConfigPath("./data")
+	viper.SetDefault("retry.times", 3)
+	viper.SetDefault("retry.delay", 5)
+	viper.SetDefault("log.level", "info")
+	viper.SetDefault("ai.timeout", 10)
+	viper.SetConfigName(CfgFileName)
+	viper.SetConfigType(CfgFileType)
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("./data")
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
