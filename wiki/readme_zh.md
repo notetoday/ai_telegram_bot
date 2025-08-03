@@ -28,7 +28,7 @@ Anti-spam robot for [Telegram](https://telegram.org/) groups
 
 ```shell
 # 克隆项目
-git clone https://github.com/assimon/ai-anti-bot.git && cd ai-anti-bot && mkdir data
+git clone https://github.com/notetoday/ai-anti-bot.git && cd ai-anti-bot && mkdir data
 
 # 创建配置文件
 cp config.yml.example data/config.yml
