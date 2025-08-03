@@ -6,6 +6,13 @@ telegram:
 identification_model: "chatgpt"
 clean_bot_message: false
 
+log:
+  level: "info"
+
+retry:
+  times: 3
+  delay: 5
+
 strategy:
   joined_time: 3
   number_of_speeches: 3

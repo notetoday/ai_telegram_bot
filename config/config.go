@@ -11,6 +11,9 @@ const (
 )
 
 func init() {
+	viper.SetDefault("retry.times", 3)
+	viper.SetDefault("retry.delay", 5)
+	viper.SetDefault("log.level", "info")
 	viper.SetConfigName(CfgFileName)
 	viper.SetConfigType(CfgFileType)
 	viper.AddConfigPath(".")

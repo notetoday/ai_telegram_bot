@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"github.com/assimon/ai-anti-bot/adapter"
 	"github.com/assimon/ai-anti-bot/pkg/json"
+	"github.com/assimon/ai-anti-bot/pkg/logger"
 	"github.com/sashabaranov/go-openai"
 	"github.com/spf13/viper"
+	"time"
 )
 
 var _ adapter.IModel = (*ChatGpt)(nil)
@@ -39,11 +41,23 @@ func (c *ChatGpt) RecognizeTextMessage(ctx context.Context, userInfo, message st
 			},
 		},
 	}
-	resp, err := c.Client.CreateChatCompletion(
-		ctx,
-		req,
-	)
+	var resp openai.ChatCompletionResponse
+	var err error
+	for i := 0; i < viper.GetInt("retry.times"); i++ {
+		logger.Log.Infof("Recognize message attempt %d", i+1)
+		resp, err = c.Client.CreateChatCompletion(
+			ctx,
+			req,
+		)
+		if err == nil {
+			logger.Log.Info("Recognize message success")
+			break
+		}
+		logger.Log.Warnf("Recognize message failed: %s", err.Error())
+		time.Sleep(time.Duration(viper.GetInt("retry.delay")) * time.Second)
+	}
 	if err != nil {
+		logger.Log.Error("Recognize message finally failed")
 		return result, err
 	}
 
@@ -78,11 +92,23 @@ func (c *ChatGpt) RecognizeImageMessage(ctx context.Context, userInfo, file stri
 			},
 		},
 	}
-	resp, err := c.Client.CreateChatCompletion(
-		ctx,
-		req,
-	)
+	var resp openai.ChatCompletionResponse
+	var err error
+	for i := 0; i < viper.GetInt("retry.times"); i++ {
+		logger.Log.Infof("Recognize message attempt %d", i+1)
+		resp, err = c.Client.CreateChatCompletion(
+			ctx,
+			req,
+		)
+		if err == nil {
+			logger.Log.Info("Recognize message success")
+			break
+		}
+		logger.Log.Warnf("Recognize message failed: %s", err.Error())
+		time.Sleep(time.Duration(viper.GetInt("retry.delay")) * time.Second)
+	}
 	if err != nil {
+		logger.Log.Error("Recognize message finally failed")
 		return result, err
 	}
 	err = json.C.UnmarshalFromString(resp.Choices[0].Message.Content, &result)

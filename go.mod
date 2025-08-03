@@ -6,8 +6,8 @@ require (
 	github.com/golang-module/carbon/v2 v2.3.12
 	github.com/json-iterator/go v1.1.12
 	github.com/sashabaranov/go-openai v1.27.0
+	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/viper v1.19.0
-	golang.org/x/image v0.0.0-20190802002840-cff245a6509b
 	gopkg.in/telebot.v3 v3.3.6
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.11
@@ -18,6 +18,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
