@@ -217,8 +217,7 @@ func OnChatMemberMessage(c tb.Context) error {
 func AddAd(c tb.Context) error {
 	payload := c.Message().Payload
 	payloadSlice := strings.Split(payload, "|")
-	if len(payloadSlice) != 4 {
-		return c.Send("Message format error")
+	return c.Send("消息格式错误")
 	}
 	title := payloadSlice[0]
 	url := payloadSlice[1]
@@ -245,7 +244,7 @@ func AllAd(c tb.Context) error {
 	if err != nil {
 		return c.Send("Failed to get ad，err:" + err.Error())
 	}
-	table := "All ads：\n"
+	table := "所有广告：\n"
 	for _, advertise := range adList {
 		table += fmt.Sprintf("Id:%d|Title:%s|Url:%s|Sort:%d|ValidityPeriod:%s|CreatedAt:%s \n",
 			advertise.ID,

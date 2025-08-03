@@ -89,7 +89,7 @@ func BanChatMember(c tb.Context, res *adapter.RecognizeResult) (err error) {
 		if err != nil {
 			return err
 		}
-		unbanMsg, err := Bot.Send(c.Chat(), fmt.Sprintf("The administrator has unbanned user: [%s](%s)", userNickname, userLink), tb.ModeMarkdownV2)
+		unbanMsg, err := Bot.Send(c.Chat(), fmt.Sprintf("管理员已解除对用户: [%s](%s) 的封禁", userNickname, userLink), tb.ModeMarkdownV2)
 		time.AfterFunc(time.Minute*2, func() {
 			err = Bot.Delete(unbanMsg)
 			if err != nil {
