@@ -67,6 +67,9 @@ chatgpt:
   apikey: ""  # apikey
   model: "gpt-4o-mini"   # 要使用的检测模型。请注意，gpt4 以下版本不支持图像和文件交互。
 
+ai:
+  timeout: 10 # AI调用超时时间，单位秒。默认10秒。
+
 # 如果您的母语不是中文而是其他语言，
 # 请使用翻译将以下提示替换为您所需的语言。
 prompt:
