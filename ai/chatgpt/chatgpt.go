@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/assimon/ai-anti-bot/adapter"
+	"github.com/assimon/ai-anti-bot/config"
 	"github.com/assimon/ai-anti-bot/pkg/json"
 	"github.com/assimon/ai-anti-bot/pkg/logger"
 	"github.com/sashabaranov/go-openai"
-	"github.com/spf13/viper"
+	"net/http"
 	"time"
 )
 
@@ -23,6 +24,9 @@ func NewChatGpt(option adapter.Option) *ChatGpt {
 	if option.Proxy != "" {
 		cfg.BaseURL = option.Proxy
 	}
+	cfg.HTTPClient = &http.Client{
+		Timeout: time.Duration(config.Cfg.Ai.Timeout) * time.Second,
+	}
 	return &ChatGpt{
 		Option: option,
 		Client: openai.NewClientWithConfig(cfg),
@@ -31,7 +35,7 @@ func NewChatGpt(option adapter.Option) *ChatGpt {
 
 func (c *ChatGpt) RecognizeTextMessage(ctx context.Context, userInfo, message string) (adapter.RecognizeResult, error) {
 	var result adapter.RecognizeResult
-	prompt := fmt.Sprintf(viper.GetString("prompt.text"), userInfo, message)
+	prompt := fmt.Sprintf(config.Cfg.Prompt.Text, userInfo, message)
 	req := openai.ChatCompletionRequest{
 		Model: c.Model,
 		Messages: []openai.ChatCompletionMessage{
@@ -43,7 +47,7 @@ func (c *ChatGpt) RecognizeTextMessage(ctx context.Context, userInfo, message st
 	}
 	var resp openai.ChatCompletionResponse
 	var err error
-	for i := 0; i < viper.GetInt("retry.times"); i++ {
+	for i := 0; i < config.Cfg.Retry.Times; i++ {
 		logger.Log.Infof("Recognize message attempt %d", i+1)
 		resp, err = c.Client.CreateChatCompletion(
 			ctx,
@@ -54,7 +58,7 @@ func (c *ChatGpt) RecognizeTextMessage(ctx context.Context, userInfo, message st
 			break
 		}
 		logger.Log.Warnf("Recognize message failed: %s", err.Error())
-		time.Sleep(time.Duration(viper.GetInt("retry.delay")) * time.Second)
+		time.Sleep(time.Duration(config.Cfg.Retry.Delay) * time.Second)
 	}
 	if err != nil {
 		logger.Log.Error("Recognize message finally failed")
@@ -75,7 +79,7 @@ func (c *ChatGpt) RecognizeTextMessage(ctx context.Context, userInfo, message st
 
 func (c *ChatGpt) RecognizeImageMessage(ctx context.Context, userInfo, file string) (adapter.RecognizeResult, error) {
 	var result adapter.RecognizeResult
-	prompt := fmt.Sprintf(viper.GetString("prompt.image"), userInfo)
+	prompt := fmt.Sprintf(config.Cfg.Prompt.Image, userInfo)
 	req := openai.ChatCompletionRequest{
 		Model: c.Model,
 		Messages: []openai.ChatCompletionMessage{
@@ -99,7 +103,7 @@ func (c *ChatGpt) RecognizeImageMessage(ctx context.Context, userInfo, file stri
 	}
 	var resp openai.ChatCompletionResponse
 	var err error
-	for i := 0; i < viper.GetInt("retry.times"); i++ {
+	for i := 0; i < config.Cfg.Retry.Times; i++ {
 		logger.Log.Infof("Recognize message attempt %d", i+1)
 		resp, err = c.Client.CreateChatCompletion(
 			ctx,
@@ -110,7 +114,7 @@ func (c *ChatGpt) RecognizeImageMessage(ctx context.Context, userInfo, file stri
 			break
 		}
 		logger.Log.Warnf("Recognize message failed: %s", err.Error())
-		time.Sleep(time.Duration(viper.GetInt("retry.delay")) * time.Second)
+		time.Sleep(time.Duration(config.Cfg.Retry.Delay) * time.Second)
 	}
 	if err != nil {
 		logger.Log.Error("Recognize message finally failed")

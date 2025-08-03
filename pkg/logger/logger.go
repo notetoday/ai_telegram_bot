@@ -1,8 +1,8 @@
 package logger
 
 import (
+	"github.com/assimon/ai-anti-bot/config"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"os"
 )
 
@@ -10,7 +10,7 @@ var Log = logrus.New()
 
 func init() {
 	Log.Out = os.Stdout
-	level, err := logrus.ParseLevel(viper.GetString("log.level"))
+	level, err := logrus.ParseLevel(config.Cfg.Log.Level)
 	if err != nil {
 		level = logrus.InfoLevel
 	}
