@@ -217,7 +217,8 @@ func OnChatMemberMessage(c tb.Context) error {
 func AddAd(c tb.Context) error {
 	payload := c.Message().Payload
 	payloadSlice := strings.Split(payload, "|")
-	return c.Send("消息格式错误")
+	if len(payloadSlice) != 4 {
+		return c.Send("消息格式错误")
 	}
 	title := payloadSlice[0]
 	url := payloadSlice[1]
