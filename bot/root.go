@@ -45,6 +45,18 @@ func RegisterCommands() {
 			Text:        StartCmd,
 			Description: "Hello🙌",
 		},
+		{
+			Text:        AllAdCmd,
+			Description: "查看所有广告",
+		},
+		{
+			Text:        AddAdCmd,
+			Description: "添加广告",
+		},
+		{
+			Text:        DelAdCmd,
+			Description: "删除广告",
+		},
 	})
 }
 

@@ -218,23 +218,35 @@ func AddAd(c tb.Context) error {
 	payload := c.Message().Payload
 	payloadSlice := strings.Split(payload, "|")
 	if len(payloadSlice) != 4 {
-		return c.Send("消息格式错误")
+		return c.Send("消息格式错误。请使用以下格式：标题|URL|有效期(YYYY-MM-DD)|排序值。例如：广告标题|https://example.com|2025-12-31|1")
 	}
 	title := payloadSlice[0]
 	url := payloadSlice[1]
-	validityPeriod := payloadSlice[2]
-	sort, _ := strconv.Atoi(payloadSlice[3])
+	validityPeriodStr := payloadSlice[2]
+	sortStr := payloadSlice[3]
+
+	sort, err := strconv.Atoi(sortStr)
+	if err != nil {
+		return c.Send(fmt.Sprintf("排序值无效，请输入一个整数。错误：%s", err.Error()))
+	}
+
+	validityPeriodCbn := carbon.Parse(validityPeriodStr)
+	if validityPeriodCbn.Error != nil {
+		return c.Send(fmt.Sprintf("有效期格式错误，请使用 YYYY-MM-DD 格式。错误：%s", validityPeriodCbn.Error.Error()))
+	}
+	validityPeriod := validityPeriodCbn.ToDateTimeStruct()
+
 	ad := database.Advertise{
 		Title:          title,
 		Url:            url,
 		Sort:           sort,
-		ValidityPeriod: carbon.Parse(validityPeriod).ToDateTimeStruct(),
+		ValidityPeriod: validityPeriod,
 	}
-	err := database.AddAdvertise(ad)
+	err = database.AddAdvertise(ad)
 	if err != nil {
-		return c.Send("Failed to add ad:" + err.Error())
+		return c.Send("添加广告失败：" + err.Error())
 	}
-	if err = c.Send("Added ad successfully"); err != nil {
+	if err = c.Send("广告添加成功！"); err != nil {
 		fmt.Println("[AddAd] send success message err:", err)
 	}
 	return AllAd(c)
@@ -262,16 +274,16 @@ func AllAd(c tb.Context) error {
 func DelAd(c tb.Context) error {
 	payload := c.Message().Payload
 	if payload == "" {
-		return c.Send("Message format error")
+		return c.Send("消息格式错误。请提供要删除的广告ID。例如：/delad 123")
 	}
 	id, err := strconv.ParseInt(payload, 10, 64)
 	if err != nil {
-		return c.Send(err.Error())
+		return c.Send(fmt.Sprintf("广告ID无效，请输入一个整数。错误：%s", err.Error()))
 	}
 	if err = database.DeleteAdvertise(id); err != nil {
-		return c.Send(err.Error())
+		return c.Send("删除广告失败：" + err.Error())
 	}
-	if err = c.Send("Ads deleted successfully！"); err != nil {
+	if err = c.Send("广告删除成功！"); err != nil {
 		fmt.Println("[DelAd] send success message err:", err)
 	}
 	return AllAd(c)
