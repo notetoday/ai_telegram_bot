@@ -3,6 +3,7 @@ telegram:
   token: ""
   groups: [""]
   owners: [""]
+  delete_prompt_messages: true
 identification_model: "chatgpt"
 clean_bot_message: false
 

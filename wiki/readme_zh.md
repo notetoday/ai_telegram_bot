@@ -49,6 +49,7 @@ telegram:
   token: ""     # 填写您的机器人Token
   groups: [""]  # 填写机器人需要生效的群组ID
   owners: [""]  # 填写超级管理员的telegram用户ID
+  delete_prompt_messages: true # 是否定时删除机器人发出的提示消息（如封禁提示、解封提示），默认为 true
 identification_model: "chatgpt"
 clean_bot_message: true # 定时清理机器人消息
 

@@ -42,6 +42,7 @@ func init() {
 	viper.SetDefault("retry.delay", 5)
 	viper.SetDefault("log.level", "info")
 	viper.SetDefault("ai.timeout", 10)
+	viper.SetDefault("telegram.delete_prompt_messages", true)
 	viper.SetConfigName(CfgFileName)
 	viper.SetConfigType(CfgFileType)
 	viper.AddConfigPath(".")

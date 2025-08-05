@@ -90,24 +90,28 @@ func BanChatMember(c tb.Context, res *adapter.RecognizeResult) (err error) {
 			return err
 		}
 		unbanMsg, err := Bot.Send(c.Chat(), fmt.Sprintf("管理员已解除对用户: [%s](%s) 的封禁", userNickname, userLink), tb.ModeMarkdownV2)
-		time.AfterFunc(time.Minute*2, func() {
-			err = Bot.Delete(unbanMsg)
-			if err != nil {
-				log.Println(err)
-			}
-		})
+		if viper.GetBool("telegram.delete_prompt_messages") { // Check the new config
+			time.AfterFunc(time.Minute*2, func() {
+				err = Bot.Delete(unbanMsg)
+				if err != nil {
+					log.Println(err)
+				}
+			})
+		}
 		return err
 	}, isManageMiddleware)
 	msg, err := Bot.Send(c.Chat(), blockMessage, manslaughterMenu, tb.ModeMarkdownV2)
 	if err != nil {
 		return err
 	}
-	time.AfterFunc(time.Minute*2, func() {
-		err = Bot.Delete(msg)
-		if err != nil {
-			log.Println(err)
-		}
-	})
+	if viper.GetBool("telegram.delete_prompt_messages") { // Check the new config
+		time.AfterFunc(time.Minute*2, func() {
+			err = Bot.Delete(msg)
+			if err != nil {
+				log.Println(err)
+			}
+		})
+	}
 	return
 }
 
